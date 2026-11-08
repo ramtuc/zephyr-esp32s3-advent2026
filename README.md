@@ -2,9 +2,9 @@
 
 Qiita Advent Calendar 2026「Zephyr RTOS」シリーズのサンプルコードです。ESP32-S3 のボードで Zephyr RTOS を動かします。
 
-- Qiita 記事（12/4 公開予定）: ESP32 で Zephyr RTOS を動かす環境構築と Lチカ
+- Qiita 記事（公開予定）: ESP32 で Zephyr RTOS を動かす環境構築と Lチカ
 
-シリーズの続き（12/5・12/9・12/10・12/24）のコードも、このリポジトリに追加していく予定です。
+シリーズの続きの記事（Device Tree、Kconfig、Sensor API、West と CI）のコードも、このリポジトリに追加していく予定です。
 
 ## 動作を確認した環境
 
@@ -20,7 +20,7 @@ Qiita Advent Calendar 2026「Zephyr RTOS」シリーズのサンプルコード�
 
 | フォルダ | 内容 | 記事 |
 | --- | --- | --- |
-| `apps/blinky-ext` | Zephyr の `samples/basic/blinky` に、外付け LED を `led0` として定義する `app.overlay` を足したもの | 12/4 |
+| `apps/blinky-ext` | Zephyr の `samples/basic/blinky` に、外付け LED を `led0` として定義する `app.overlay` を足したもの | 環境構築と Lチカ |
 
 ### apps/blinky-ext の配線
 
