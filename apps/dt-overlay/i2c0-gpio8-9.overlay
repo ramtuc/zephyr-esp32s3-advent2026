@@ -1,0 +1,22 @@
+/*
+ * I2C0 のピンを GPIO8 (SDA) / GPIO9 (SCL) に付け替える
+ * 使い方: west build ... -- -DEXTRA_DTC_OVERLAY_FILE=i2c0-gpio8-9.overlay
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+&pinctrl {
+	i2c0_alt: i2c0_alt {
+		group1 {
+			pinmux = <I2C0_SDA_GPIO8>,
+				 <I2C0_SCL_GPIO9>;
+			bias-pull-up;
+			drive-open-drain;
+			output-high;
+		};
+	};
+};
+
+&i2c0 {
+	pinctrl-0 = <&i2c0_alt>;
+};
