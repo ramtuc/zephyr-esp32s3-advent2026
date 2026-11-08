@@ -21,7 +21,7 @@ Qiita Advent Calendar 2026「Zephyr RTOS」シリーズのサンプルコード�
 | フォルダ | 内容 | 記事 |
 | --- | --- | --- |
 | `apps/blinky-ext` | Zephyr の `samples/basic/blinky` に、外付け LED を `led0` として定義する `app.overlay` を足したもの | 環境構築と Lチカ |
-| `apps/dt-overlay` | Device Tree の overlay の例。外付け LED を `led0` に、I2C0 を有効にして 400kHz に、I2C0 のピンを GPIO8/9 に付け替え（`i2c0-gpio8-9.overlay`）。起動時に I2C バスのアドレスを探して表示する | Device Tree |
+| `apps/dt-overlay` | Device Tree の overlay の例。外付け LED を `led0` に、I2C0 を有効にして 400kHz に、I2C0 のピンを GPIO8/9 に付け替え（`i2c0-gpio8-9.overlay`）、BME280 を `bme280@76` として I2C0 に宣言。起動時に I2C バスのアドレスを探して表示する | Device Tree |
 
 ### apps/blinky-ext の配線
 
