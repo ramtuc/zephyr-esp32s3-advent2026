@@ -1,0 +1,12 @@
+# Zephyr build output
+build/
+build-*/
+twister-out*/
+
+# Python / editor
+.venv/
+__pycache__/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
