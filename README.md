@@ -22,6 +22,7 @@ Qiita Advent Calendar 2026「Zephyr RTOS」シリーズのサンプルコード�
 | --- | --- | --- |
 | `apps/blinky-ext` | Zephyr の `samples/basic/blinky` に、外付け LED を `led0` として定義する `app.overlay` を足したもの | 環境構築と Lチカ |
 | `apps/dt-overlay` | Device Tree の overlay の例。外付け LED を `led0` に、I2C0 を有効にして 400kHz に、I2C0 のピンを GPIO8/9 に付け替え（`i2c0-gpio8-9.overlay`）、BME280 を `bme280@76` として I2C0 に宣言。起動時に I2C バスのアドレスを探して表示する | Device Tree |
+| `apps/kconfig-footprint` | Kconfig で ROM と RAM を削る例。LED を点滅させてログを出すだけのアプリを、`prj_0_full.conf`（シェル・ロギング・ネットワークと Wi-Fi）から `prj_5_no_console.conf`（ログもコンソールも無し）まで、設定だけを変えてビルドする。`debug_stacks.conf` はスタックの使用量を測るときに足す | Kconfig |
 
 ### apps/blinky-ext の配線
 
@@ -54,6 +55,18 @@ west espressif monitor -p COMx   # 終了は Ctrl+]
 - `COMx` は、ボードをつないだときにデバイスマネージャーに出る COM ポートに置き換えてください。
 - `-S espressif-flash-16M` は、ボードのフラッシュ（16MB）に合わせる snippet です。DevKitC の定義は 8MB 前提なので、付けなくても動きます（起動ログにフラッシュの大きさの警告が出ます）。
 - `-S` は west の引数なので、`--` より前に書きます。
+
+### apps/kconfig-footprint のビルド
+
+設定ファイルは `-DCONF_FILE=` で選びます（PowerShell では `-D...` を `"` で囲みます）。
+
+```powershell
+west build -p always -b esp32s3_devkitc/esp32s3/procpu apps/kconfig-footprint -- "-DCONF_FILE=prj_4_stacks.conf"
+west build -t rom_report
+west build -t ram_report
+```
+
+`prj_0_full.conf` は Wi-Fi のドライバを含みます。大きさを比べるための構成で、記事では実機に書き込んでいません。
 
 ## ライセンス
 
