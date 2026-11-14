@@ -81,12 +81,12 @@ Windows では、パスの長さの制限を避けるために `--short-build-pa
 
 ### GitHub Actions
 
-`.github/workflows/build.yml` で、push と pull request のたびに次の3つを動かします。
+`.github/workflows/build.yml` で、main への push と pull request のたびに次の3つを動かします。
 
 | ジョブ | 内容 |
 | --- | --- |
 | build | twister で全部のアプリをビルドし、メモリの使用量を Summary に表で出す（`scripts/footprint_summary.py`） |
-| sca | GCC の静的解析（`ZEPHYR_SCA_VARIANT=gcc`）を付けてビルドし、このリポジトリのコードに指摘があれば失敗にする（`scripts/sca_report.py`） |
+| sca | GCC の静的解析（`ZEPHYR_SCA_VARIANT=gcc`）を付けてビルドし、`apps/` のコードに指摘があれば失敗にする（`scripts/sca_report.py`） |
 | qemu | `apps/blinky-ext` を `esp32s3_devkitc/esp32s3/procpu/qemu` 向けにビルドし、Espressif の QEMU で動かして `LED state: ON` が出るかを確かめる |
 
 ## ビルドと書き込み

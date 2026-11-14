@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 # twister の出力フォルダにある各ビルドの build.log から、GCC の静的解析（-fanalyzer）の
 # 指摘（[-Wanalyzer-...]）を集め、Markdown で出す。
-# 指摘のうち、このリポジトリのファイル（自分のコード）にあるものが1件でもあれば、
+# 指摘のうち、自分のコードのフォルダ（CI では apps）の下にあるものが1件でもあれば、
 # 終了コード 1 で終わる（CI のジョブを失敗にする）。Zephyr 本体などの指摘は数えて出すだけ。
 #
-#   python3 scripts/sca_report.py twister-out [自分のコードのフォルダ]
+#   python3 scripts/sca_report.py twister-out apps
+#
+# 自分のコードのフォルダに . を渡すと、リポジトリの中にできる twister-out/ の生成ファイルも
+# 自分のコードに数えてしまうので、C のコードがあるフォルダ（apps）を渡す。
 #
 # SPDX-License-Identifier: Apache-2.0
 
@@ -55,5 +58,5 @@ if __name__ == "__main__":
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
     outdir = sys.argv[1] if len(sys.argv) > 1 else "twister-out"
-    own_root = sys.argv[2] if len(sys.argv) > 2 else "."
+    own_root = sys.argv[2] if len(sys.argv) > 2 else "apps"
     sys.exit(main(outdir, own_root))

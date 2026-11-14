@@ -1,10 +1,12 @@
-# apps/ 以下のアプリを、push と pull request のたびに ESP32-S3 向けにビルドする
+# apps/ 以下のアプリを、main への push と pull request のたびに ESP32-S3 向けにビルドする
 # SPDX-License-Identifier: Apache-2.0
 
 name: Build
 
 on:
+  # 同じ commit で二重に動かないように、push は main だけにする（ほかのブランチは pull request で動く）
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
@@ -90,7 +92,8 @@ jobs:
         run: west blobs fetch hal_espressif
 
       # Zephyr 本体のコードにも解析の指摘が出るので、twister の「警告をエラーにする」を外し（-W）、
-      # 自分のコード（このリポジトリ）の指摘だけで失敗にする（scripts/sca_report.py）。
+      # 自分のコード（apps/ の下）の指摘だけで失敗にする（scripts/sca_report.py）。
+      # twister-out/ もリポジトリの中にできるので、自分のコードのフォルダは . ではなく apps にする。
       - name: Build apps with GCC static analyzer
         working-directory: zephyr-esp32s3-advent2026
         run: west twister -T apps -v --inline-logs --integration -W -x=ZEPHYR_SCA_VARIANT=gcc
@@ -99,7 +102,7 @@ jobs:
         working-directory: zephyr-esp32s3-advent2026
         run: |
           rc=0
-          python3 scripts/sca_report.py twister-out . > sca_report.md || rc=$?
+          python3 scripts/sca_report.py twister-out apps > sca_report.md || rc=$?
           echo "## GCC の静的解析" >> "$GITHUB_STEP_SUMMARY"
           cat sca_report.md >> "$GITHUB_STEP_SUMMARY"
           cat sca_report.md
