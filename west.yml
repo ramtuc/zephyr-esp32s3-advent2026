@@ -3,7 +3,7 @@
 #   west init -l zephyr-esp32s3-advent2026
 #   west update
 #
-# Zephyr は v4.5.0 に固定し、モジュールは ESP32 に要る hal_espressif だけを取る。
+# Zephyr は v4.5.0 に固定し、モジュールは apps/ のビルドに要るものだけを取る。
 # SPDX-License-Identifier: Apache-2.0
 
 manifest:
@@ -18,4 +18,6 @@ manifest:
       import:
         # Zephyr の west.yml にあるモジュールのうち、ここに挙げたものだけを取る
         name-allowlist:
-          - hal_espressif
+          - hal_espressif  # ESP32 の HAL（Wi-Fi などの blob もここから取る）
+          - mbedtls        # ESP32 の Wi-Fi のドライバが使う
+          - tf-psa-crypto  # mbedtls が使う
