@@ -1,0 +1,16 @@
+sample:
+  name: dt-overlay
+  description: Device Tree の overlay の例（LED、I2C0、BME280 のノード）
+common:
+  platform_allow:
+    - esp32s3_devkitc/esp32s3/procpu
+  integration_platforms:
+    - esp32s3_devkitc/esp32s3/procpu
+  build_only: true
+  tags: advent2026
+tests:
+  advent.dt_overlay: {}
+  # I2C0 のピンを GPIO8/9 に付け替える overlay を足したビルド
+  advent.dt_overlay.i2c0_gpio8_9:
+    extra_args:
+      - EXTRA_DTC_OVERLAY_FILE=i2c0-gpio8-9.overlay

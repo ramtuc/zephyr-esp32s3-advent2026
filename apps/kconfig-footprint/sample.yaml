@@ -1,0 +1,29 @@
+sample:
+  name: kconfig-footprint
+  description: Kconfig で ROM と RAM を削る例（設定ファイルを6通り）
+common:
+  platform_allow:
+    - esp32s3_devkitc/esp32s3/procpu
+  integration_platforms:
+    - esp32s3_devkitc/esp32s3/procpu
+  build_only: true
+  tags: advent2026
+tests:
+  advent.kconfig_footprint.0_full:
+    extra_args:
+      - CONF_FILE=prj_0_full.conf
+  advent.kconfig_footprint.1_no_net:
+    extra_args:
+      - CONF_FILE=prj_1_no_net.conf
+  advent.kconfig_footprint.2_no_shell:
+    extra_args:
+      - CONF_FILE=prj_2_no_shell.conf
+  advent.kconfig_footprint.3_log_minimal:
+    extra_args:
+      - CONF_FILE=prj_3_log_minimal.conf
+  advent.kconfig_footprint.4_stacks:
+    extra_args:
+      - CONF_FILE=prj_4_stacks.conf
+  advent.kconfig_footprint.5_no_console:
+    extra_args:
+      - CONF_FILE=prj_5_no_console.conf

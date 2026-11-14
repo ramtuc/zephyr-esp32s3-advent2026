@@ -1,0 +1,16 @@
+sample:
+  name: blinky-ext
+  description: 外付け LED（IO7）を led0 として点滅させる
+common:
+  platform_allow:
+    - esp32s3_devkitc/esp32s3/procpu
+  integration_platforms:
+    - esp32s3_devkitc/esp32s3/procpu
+  build_only: true
+  tags: advent2026
+tests:
+  advent.blinky_ext: {}
+  # ボードのフラッシュ（16MB）に合わせた snippet を付けたビルド
+  advent.blinky_ext.flash16m:
+    required_snippets:
+      - espressif-flash-16M

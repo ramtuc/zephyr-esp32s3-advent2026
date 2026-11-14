@@ -1,0 +1,16 @@
+sample:
+  name: sensor-read-decode
+  description: BME280 をセンサ API の Read/Decode で読む
+common:
+  platform_allow:
+    - esp32s3_devkitc/esp32s3/procpu
+  integration_platforms:
+    - esp32s3_devkitc/esp32s3/procpu
+  build_only: true
+  tags: advent2026
+tests:
+  advent.sensor_read_decode: {}
+  # 温度センサを SHT4x に替えるビルド
+  advent.sensor_read_decode.sht4x:
+    extra_args:
+      - EXTRA_DTC_OVERLAY_FILE=sht4x.overlay
