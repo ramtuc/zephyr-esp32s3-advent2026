@@ -1,0 +1,21 @@
+# Zephyr のワークスペースの manifest（west.yml）
+#
+#   west init -l zephyr-esp32s3-advent2026
+#   west update
+#
+# Zephyr は v4.5.0 に固定し、モジュールは ESP32 に要る hal_espressif だけを取る。
+# SPDX-License-Identifier: Apache-2.0
+
+manifest:
+  remotes:
+    - name: zephyrproject-rtos
+      url-base: https://github.com/zephyrproject-rtos
+
+  projects:
+    - name: zephyr
+      remote: zephyrproject-rtos
+      revision: v4.5.0
+      import:
+        # Zephyr の west.yml にあるモジュールのうち、ここに挙げたものだけを取る
+        name-allowlist:
+          - hal_espressif
