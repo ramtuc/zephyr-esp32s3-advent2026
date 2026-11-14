@@ -34,7 +34,9 @@ jobs:
         with:
           app-path: zephyr-esp32s3-advent2026
           toolchains: xtensa-espressif_esp32s3_zephyr-elf
-          ccache-cache-key: esp32s3
+          # キャッシュは「ccache-<この名前>-」で始まるものを前方一致で戻す。
+          # ほかのジョブの名前（esp32s3-sca、esp32s3-qemu）の先頭と重ならない名前にする
+          ccache-cache-key: esp32s3-build
 
       # Wi-Fi 入りのビルドは、hal_espressif の blob が全部そろっているかを確かめる。
       # --allow-regex で ESP32-S3 の分だけに絞ると、そこで止まるので全部取る。
