@@ -1,10 +1,12 @@
 # zephyr-esp32s3-advent2026
 
+[![Build](https://github.com/ramtuc/zephyr-esp32s3-advent2026/actions/workflows/build.yml/badge.svg)](https://github.com/ramtuc/zephyr-esp32s3-advent2026/actions/workflows/build.yml)
+
 Qiita Advent Calendar 2026「Zephyr RTOS」シリーズのサンプルコードです。ESP32-S3 のボードで Zephyr RTOS を動かします。
 
 - Qiita 記事（公開予定）: ESP32 で Zephyr RTOS を動かす環境構築と Lチカ
 
-シリーズの続きの記事（Device Tree、Kconfig、Sensor API、West と CI）のコードも、このリポジトリに追加していく予定です。
+シリーズの記事（環境構築、Device Tree、Kconfig、Sensor API、West と CI）のコードを、このリポジトリにまとめています。
 
 ## 動作を確認した環境
 
@@ -48,6 +50,44 @@ LED は1秒ごとに点滅し、シリアルに `LED state: ON` / `OFF` が出�
 | GND | GND、SDO（I2C アドレスを 0x76 にする） |
 
 `apps/sensor-fetch-get` と `apps/sensor-read-decode` の `sht4x.overlay` は、温度センサを SHT4x（Sensirion）に替える場合の例です。`-DEXTRA_DTC_OVERLAY_FILE=sht4x.overlay` を付けてビルドできることだけを確かめています（SHT4x の実機では動かしていません）。
+
+## West のワークスペースとして使う
+
+このリポジトリは、West の manifest（`west.yml`）を持っています。Zephyr は v4.5.0 に固定し、モジュールは `hal_espressif`、`mbedtls`、`tf-psa-crypto` だけを取ります。新しいフォルダで次のようにすると、このリポジトリ用のワークスペースができます（Zephyr SDK 1.0.1 は入っている前提）。
+
+```powershell
+mkdir C:\zephyr-ci
+cd C:\zephyr-ci
+git clone https://github.com/ramtuc/zephyr-esp32s3-advent2026
+py -3.12 -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install west
+west init -l zephyr-esp32s3-advent2026
+west update
+west packages pip --install
+west blobs fetch hal_espressif
+```
+
+### 全部のアプリをまとめてビルドする（twister）
+
+各アプリの `sample.yaml` に、記事で使ったビルドの形（16 通り）を書いています。
+
+```powershell
+cd zephyr-esp32s3-advent2026
+west twister -T apps -v --inline-logs --integration --short-build-path -O C:/zt
+```
+
+Windows では、パスの長さの制限を避けるために `--short-build-path` と短い出力先（`-O`）を付けます。
+
+### GitHub Actions
+
+`.github/workflows/build.yml` で、push と pull request のたびに次の3つを動かします。
+
+| ジョブ | 内容 |
+| --- | --- |
+| build | twister で全部のアプリをビルドし、メモリの使用量を Summary に表で出す（`scripts/footprint_summary.py`） |
+| sca | GCC の静的解析（`ZEPHYR_SCA_VARIANT=gcc`）を付けてビルドし、このリポジトリのコードに指摘があれば失敗にする（`scripts/sca_report.py`） |
+| qemu | `apps/blinky-ext` を `esp32s3_devkitc/esp32s3/procpu/qemu` 向けにビルドし、Espressif の QEMU で動かして `LED state: ON` が出るかを確かめる |
 
 ## ビルドと書き込み
 
