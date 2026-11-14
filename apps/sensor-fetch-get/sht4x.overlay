@@ -1,0 +1,24 @@
+/*
+ * 温度センサを SHT4x (Sensirion) に替える場合の例
+ * (ビルドの確認用。この記事の配線には SHT4x はつないでいない)
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/ {
+	aliases {
+		ambient-temp0 = &sht4x;
+	};
+};
+
+&i2c0 {
+	sht4x: sht4x@44 {
+		compatible = "sensirion,sht4x";
+		reg = <0x44>;
+		repeatability = <2>;
+	};
+};
+
+&bme280 {
+	status = "disabled";
+};

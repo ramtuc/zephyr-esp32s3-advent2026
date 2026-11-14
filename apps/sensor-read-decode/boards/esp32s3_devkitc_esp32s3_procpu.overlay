@@ -1,0 +1,25 @@
+/*
+ * ESPr Developer S3 Type-C 用の overlay
+ * (Zephyr のボード名は esp32s3_devkitc/esp32s3/procpu を流用)
+ *
+ * I2C0 (SDA=GPIO1, SCL=GPIO2) に BME280 (0x76) をつなぐ
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/ {
+	aliases {
+		/* アプリはこの別名でセンサを取る (型番を C のソースに書かない) */
+		ambient-temp0 = &bme280;
+	};
+};
+
+&i2c0 {
+	status = "okay";
+	clock-frequency = <I2C_BITRATE_FAST>;
+
+	bme280: bme280@76 {
+		compatible = "bosch,bme280";
+		reg = <0x76>;
+	};
+};

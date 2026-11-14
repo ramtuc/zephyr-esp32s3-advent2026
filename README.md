@@ -23,6 +23,9 @@ Qiita Advent Calendar 2026「Zephyr RTOS」シリーズのサンプルコード�
 | `apps/blinky-ext` | Zephyr の `samples/basic/blinky` に、外付け LED を `led0` として定義する `app.overlay` を足したもの | 環境構築と Lチカ |
 | `apps/dt-overlay` | Device Tree の overlay の例。外付け LED を `led0` に、I2C0 を有効にして 400kHz に、I2C0 のピンを GPIO8/9 に付け替え（`i2c0-gpio8-9.overlay`）、BME280 を `bme280@76` として I2C0 に宣言。起動時に I2C バスのアドレスを探して表示する | Device Tree |
 | `apps/kconfig-footprint` | Kconfig で ROM と RAM を削る例。LED を点滅させてログを出すだけのアプリを、`prj_0_full.conf`（シェル・ロギング・ネットワークと Wi-Fi）から `prj_5_no_console.conf`（ログもコンソールも無し）まで、設定だけを変えてビルドする。`debug_stacks.conf` はスタックの使用量を測るときに足す | Kconfig |
+| `apps/sensor-fetch-get` | BME280 の温度・気圧・湿度を、センサ API の Fetch/Get（`sensor_sample_fetch` / `sensor_channel_get`）で2秒ごとに読む。センサは Device Tree の別名 `ambient-temp0` で取る | Sensor API |
+| `apps/sensor-read-decode` | 同じ値を Read/Decode（`sensor_read` とデコーダ）で読む | Sensor API |
+| `apps/sensor-shell` | sensor shell（`CONFIG_SENSOR_SHELL`）入りのビルド。`main` は何もせず、シリアルのシェルで `sensor get bme280@76` と打って値を見る | Sensor API |
 
 ### apps/blinky-ext の配線
 
@@ -32,6 +35,19 @@ Qiita Advent Calendar 2026「Zephyr RTOS」シリーズのサンプルコード�
 | GND | LED のカソード |
 
 LED は1秒ごとに点滅し、シリアルに `LED state: ON` / `OFF` が出ます。
+
+### Sensor API のアプリの配線
+
+`apps/dt-overlay` の BME280 と同じです。BME280 モジュール（秋月電子通商 AE-BME280）を I2C0 につなぎます。
+
+| ボード | AE-BME280 |
+| --- | --- |
+| IO1 | SDI（SDA） |
+| IO2 | SCK（SCL） |
+| 3V3 | VDD、CSB（I2C モードにする） |
+| GND | GND、SDO（I2C アドレスを 0x76 にする） |
+
+`apps/sensor-fetch-get` と `apps/sensor-read-decode` の `sht4x.overlay` は、温度センサを SHT4x（Sensirion）に替える場合の例です。`-DEXTRA_DTC_OVERLAY_FILE=sht4x.overlay` を付けてビルドできることだけを確かめています（SHT4x の実機では動かしていません）。
 
 ## ビルドと書き込み
 
